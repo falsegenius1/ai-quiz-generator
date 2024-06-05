@@ -58,10 +58,10 @@
         #topic {
             padding: 1rem 2rem;
             min-width: 350px;
-            border-radius: 4rem;
+            border-radius: 1rem;
             border: none;
+            scrollbar-width: none;
         }
-
         .gradient-btn {
             background: linear-gradient(#FF9EEF, #995F90);
             color: white;
@@ -209,7 +209,7 @@
     <div class="home-div">
         <h1 class="gradient-text">AI Quiz Generator</h1>
         <p class="text">Transform any Topic into an engaging quiz, making learning interactive and fun!</p>
-        <input type="text" id="topic" name="topic" placeholder="Enter a topic..." autocomplete="off">
+        <textarea type="text" id="topic" name="topic" placeholder="Enter a topic..." autocomplete="off"></textarea>
         <button id="generateBtn" class="gradient-btn" onclick="generateQuiz()">Generate Quiz</button>
     </div>
     <div class="quiz-div hidden">
@@ -247,11 +247,16 @@
         const scoreElement = document.getElementById("score");
         const quizTitle = document.getElementById("quizTitle")
         async function generateQuiz() {
+            const topic = document.getElementById("topic").value;
+            if(!topic){
+                alert("Please provide a topic.")
+                return
+            }
             generateBtnEl.setAttribute("disabled", "true")
             generateBtnEl.textContent = "Generating..."
             document.querySelector(".scoreDiv").classList.add("hidden")
             document.querySelector(".quiz").style.display = "flex"
-            const topic = document.getElementById("topic").value;
+
             const response = await fetch(`/generate-quiz`, {
                 method: "POST",
                 headers: {
@@ -321,7 +326,7 @@
                 quizDivEl.classList.add("hidden")
                 homeDivEl.classList.remove("hidden")
             })
-            generateBtnEl.textContent = "Generate"
+            generateBtnEl.textContent = "Generate Quiz"
             document.getElementById("topic").value = ""
         }
 

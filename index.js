@@ -19,6 +19,7 @@ The topic is as follows: ${topic}
 Perform the following task for the topic provided:
 Generate 10 quiz related to the topic and output the quiz in following text format:
 {"title":"title of the quiz","quizzes": [{"question": "Question 1", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option A"}, {"question": "Question 2", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option B"}, ..., {"question": "Question 10", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option C"}]}.
+Make sure the question and options are precise.
 If the topic is not educational Output the following text {"error": "Unfortunately, this topic does not meet the standards of educational content."}
 NOTE: make sure the output is plain text only do not format in json object`;
 
@@ -27,7 +28,7 @@ NOTE: make sure the output is plain text only do not format in json object`;
         res.json(JSON.parse(text));
     } catch (e) {
         console.error(e);
-        res.status(500).json({ error: "Sorry, this video can't be processed at this moment." });
+        res.status(500).json({ error: "Sorry, the request can't be processed at this moment. Please try again." });
     }
 });
 
