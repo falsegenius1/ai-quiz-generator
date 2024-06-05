@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1E1E1E;
+            display: grid;
+            place-items: center;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .home-div,
+        .quiz-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 100vh;
+            max-width: 800px;
+            margin: 0 1rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: bolder;
+            text-align: center;
+        }
+
+        button:active {
+            scale: 0.95;
+        }
+
+        .text {
+            color: #A7A7A7;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .gradient-text {
+            background: -webkit-linear-gradient(#FF9EEF, #FF6A6A);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #topic {
+            padding: 1rem 2rem;
+            min-width: 350px;
+            border-radius: 4rem;
+            border: none;
+        }
+
+        .gradient-btn {
+            background: linear-gradient(#FF9EEF, #995F90);
+            color: white;
+            font-weight: bold;
+            padding: 0.7rem 2rem;
+            border-radius: .5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        #generateBtn:disabled {
+            opacity: 50%;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+
+        .quiz-container {
+            background: rgba(99, 99, 99, 0.15);
+            padding: 2rem;
+            border-radius: .7rem;
+        }
+
+        .quiz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+        }
+
+        #quizTitle {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .question-num {
+            background-color: white;
+            font-size: .7rem;
+            border-radius: 2rem;
+            max-width: 150px;
+            padding: 4px 10px;
+            text-align: center;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .options {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .option {
+            background-color: white;
+            border-radius: .5rem;
+            padding: .5rem;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #nextBtn {
+            margin-top: 2rem;
+            border: none;
+        }
+
+        .correct-answer {
+            border: 2px solid green;
+            background-color: rgba(0, 255, 0, 0.5);
+            color: white;
+        }
+
+        .incorrect-answer {
+            border: 2px solid red;
+            background-color: rgba(255, 0, 0, 0.49);
+            color: white;
+        }
+
+        .scoreDiv {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        #score {
+            margin: 1rem;
+        }
+
+        .decorators {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(#A651A2, #696262);
+            filter: blur(100px);
+            z-index: -100;
+        }
+
+        .top {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .bottom {
+            position: absolute;
+            bottom: 0;
+        }
+
+        @media screen and (max-width: 480px) {
+            .home-div {
+                margin-top: -3rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            #topic {
+                padding: .8rem 1.5rem;
+                min-width: 300px;
+            }
+
+            #quizTitle {
+                font-size: 1.2rem;
+            }
+
+            .question {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="home-div">
+        <h1 class="gradient-text">AI Video Quiz Generator</h1>
+        <p class="text">Transform any Topic into an engaging quiz, making learning interactive and fun!</p>
+        <input type="text" id="topic" name="topic" placeholder="Enter a topic...">
+        <button id="generateBtn" class="gradient-btn" onclick="generateQuiz()">Generate Quiz</button>
+    </div>
+    <div class="quiz-div hidden">
+        <h1 class="gradient-text">Quiz</h1>
+        <div class="quiz-container">
+            <p id="quizTitle" class="gradient-text">Chess for Beginners</p>
+            <div class="quiz">
+                <p class="question-num">Question 1 of 10</p>
+                <p class="question" id="question">What is the value of a pawn in chess?</p>
+                <ul class="options">
+                    <li><button class="option" id="option1" onclick="checkAnswer(0)"></button></li>
+                    <li><button class="option" id="option2" onclick="checkAnswer(1)"></button></li>
+                    <li><button class="option" id="option3" onclick="checkAnswer(2)"></button></li>
+                    <li><button class="option" id="option4" onclick="checkAnswer(3)"></button></li>
+                </ul>
+                <button class="gradient-btn" id="nextBtn">Next</button>
+            </div>
+            <div class="scoreDiv">
+                <p id="score">score</p>
+                <button class="gradient-btn back" id="backBtn">Back</button>
+            </div>
+        </div>
+    </div>
+    <div class="decorators top"></div>
+    <div class="decorators bottom"></div>
+
+    <script>
+        let quizzes = [];
+        let currentQuestion = 0;
+        let score = 0;
+        const homeDivEl = document.querySelector(".home-div")
+        const quizDivEl = document.querySelector(".quiz-div")
+        const generateBtnEl = document.getElementById("generateBtn")
+        const nextBtnEl = document.getElementById("nextBtn")
+        const scoreElement = document.getElementById("score");
+        const quizTitle = document.getElementById("quizTitle")
+        async function generateQuiz() {
+            generateBtnEl.setAttribute("disabled", "true")
+            generateBtnEl.textContent = "Generating..."
+            document.querySelector(".scoreDiv").classList.add("hidden")
+            document.querySelector(".quiz").style.display = "flex"
+            const topic = document.getElementById("topic").value;
+            const response = await fetch(`/generate-quiz`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({topic:topic})
+            });
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+                generateBtnEl.textContent = "Generate"
+            } else {
+                homeDivEl.classList.add("hidden")
+                quizDivEl.classList.remove("hidden")
+                quizzes = data.quizzes;
+                currentQuestion = 0;
+                score = 0;
+                displayQuestion();
+            }
+            generateBtnEl.removeAttribute("disabled")
+            quizTitle.textContent = data.title
+        }
+
+        function displayQuestion() {
+            document.querySelector(".question-num").textContent = `Question ${currentQuestion + 1} of ${quizzes.length}`
+            document.querySelectorAll('.option').forEach((option) => {
+                option.classList.remove("incorrect-answer")
+                option.classList.remove("correct-answer")
+                option.removeAttribute("disabled")
+            })
+            const currentQuiz = quizzes[currentQuestion];
+
+            document.getElementById("question").textContent = currentQuiz.question
+            document.getElementById("option1").textContent = currentQuiz.options[0]
+            document.getElementById("option2").textContent = currentQuiz.options[1]
+            document.getElementById("option3").textContent = currentQuiz.options[2]
+            document.getElementById("option4").textContent = currentQuiz.options[3]
+        }
+        nextBtnEl.addEventListener("click", () => {
+            if (currentQuestion < quizzes.length) {
+                displayQuestion();
+            } else {
+                showFinalScore();
+            }
+        })
+
+        function checkAnswer(selectedIndex) {
+            const currentQuiz = quizzes[currentQuestion];
+            const selectedOptionEl = document.querySelectorAll('.option')[selectedIndex];
+            if (currentQuiz.correct_option === currentQuiz.options[selectedIndex]) {
+                score++;
+                selectedOptionEl.classList.add("correct-answer")
+            } else {
+                const correctIndex = currentQuiz.options.indexOf(currentQuiz.correct_option);
+                selectedOptionEl.classList.add("incorrect-answer")
+                document.querySelectorAll('.option')[correctIndex].classList.add("correct-answer")
+            }
+            currentQuestion++;
+            document.querySelectorAll('.option').forEach((el) => el.setAttribute("disabled", "true"))
+        }
+
+        function showFinalScore() {
+            document.querySelector(".scoreDiv").classList.remove("hidden")
+            document.getElementById("score").textContent = `Your final score is: ${score} out of ${quizzes.length}`;
+            document.querySelector(".quiz").style.display = "none"
+            document.getElementById("backBtn").addEventListener("click", () => {
+                quizDivEl.classList.add("hidden")
+                homeDivEl.classList.remove("hidden")
+            })
+            generateBtnEl.textContent = "Generate"
+            document.getElementById("topic").value = ""
+        }
+
+    </script>
+</body>
+
+</html>
