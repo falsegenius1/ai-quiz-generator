@@ -193,6 +193,12 @@
         color: white;
         }
 
+        .explanationDiv {
+            display: none;
+            font-size: 1rem;
+            color: white;
+        }
+
         .yt-quiz-link {
             color: #aeaeae;
             margin-top: 1rem;
@@ -249,6 +255,10 @@
                     <li><button class="option" id="option3" onclick="checkAnswer(2)"></button></li>
                     <li><button class="option" id="option4" onclick="checkAnswer(3)"></button></li>
                 </ul>
+                <div class="explanationDiv" id="explanationDiv">
+                    <span>Explanation: </span>
+                    <p class="explanation" id="explanation">Explanation of the correct answer</p>
+                </div>
                 <button class="gradient-btn" id="nextBtn">Next</button>
             </div>
             <div class="scoreDiv">
@@ -270,7 +280,10 @@
         const nextBtnEl = document.getElementById("nextBtn")
         const scoreElement = document.getElementById("score");
         const quizTitle = document.getElementById("quizTitle")
-        const difficultyEl = document.getElementById("difficulty")    
+        const difficultyEl = document.getElementById("difficulty")   
+        const explanationDiv = document.getElementById("explanationDiv")
+        const explanationEl = document.getElementById("explanation")
+
         let difficulty = difficultyEl.value
         console.log(difficulty)
         difficultyEl.addEventListener("change", () => {
@@ -312,6 +325,7 @@
         }
 
         function displayQuestion() {
+            explanationDiv.style.display = "none"
             document.querySelector(".question-num").textContent = `Question ${currentQuestion + 1} of ${quizzes.length}`
             document.querySelectorAll('.option').forEach((option) => {
                 option.classList.remove("incorrect-answer")
@@ -344,6 +358,8 @@
                 const correctIndex = currentQuiz.options.indexOf(currentQuiz.correct_option);
                 selectedOptionEl.classList.add("incorrect-answer")
                 document.querySelectorAll('.option')[correctIndex].classList.add("correct-answer")
+                explanationDiv.style.display = "block"
+                explanationEl.textContent = currentQuiz.explanation
             }
             currentQuestion++;
             document.querySelectorAll('.option').forEach((el) => el.setAttribute("disabled", "true"))

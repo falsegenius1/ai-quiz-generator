@@ -19,7 +19,7 @@ The topic is as follows: ${topic}
 Difficulty is as follows: ${difficulty}
 Perform the following task for the topic provided as per the difficulty level:
 Generate 10 quiz related to the topic and output the quiz in following text format:
-{"title":"title of the quiz","quizzes": [{"question": "Question 1", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option A"}, {"question": "Question 2", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option B"}, ..., {"question": "Question 10", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option C"}]}.
+{"title":"title of the quiz","quizzes": [{"question": "Question 1", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option A", "explanation": "Explanation of the correct answer"}, {"question": "Question 2", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option B", "explanation": "Explanation of the correct answer"}, ..., {"question": "Question 10", "options": ["Option A", "Option B", "Option C", "Option D"], "correct_option": "Option C", "explanation": "Explanation of the correct answer"}]}.
 Make sure the question and options are precise.
 If the topic is not educational Output the following text {"error": "Unfortunately, this topic does not meet the standards of educational content."}
 `;
