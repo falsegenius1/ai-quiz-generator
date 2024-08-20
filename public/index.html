@@ -180,6 +180,19 @@
             bottom: 0;
         }
 
+        #difficulty  {
+            padding: .5rem;
+            border-radius: .5rem;
+            color: white;
+            background: linear-gradient(#FF9EEF, #995F90);
+        }
+
+       .selectDiff {
+        font-size: 1rem;
+        background-color: black;
+        color: white;
+        }
+
         .yt-quiz-link {
             color: #aeaeae;
             margin-top: 1rem;
@@ -215,6 +228,11 @@
         <h1 class="gradient-text">AI Quiz Generator</h1>
         <p class="text">Transform any Topic into an engaging quiz, making learning interactive and fun!</p>
         <textarea type="text" id="topic" name="topic" placeholder="Enter a topic..." autocomplete="off"></textarea>
+        <select name="difficulty" id="difficulty">
+            <option class="selectDiff" value="easy">Easy</option>
+            <option class="selectDiff" value="medium" selected>Medium</option>
+            <option class="selectDiff" value="hard">Hard</option>
+        </select>   
         <button id="generateBtn" class="gradient-btn" onclick="generateQuiz()">Generate Quiz</button>
         <a href="https://youtube-quiz-generator.vercel.app/" target="_blank" class="yt-quiz-link">✨ Explore our Youtube quiz generator!</a>
     </div>
@@ -252,6 +270,13 @@
         const nextBtnEl = document.getElementById("nextBtn")
         const scoreElement = document.getElementById("score");
         const quizTitle = document.getElementById("quizTitle")
+        const difficultyEl = document.getElementById("difficulty")    
+        let difficulty = difficultyEl.value
+        console.log(difficulty)
+        difficultyEl.addEventListener("change", () => {
+            difficulty = difficultyEl.value
+        })
+
         async function generateQuiz() {
             const topic = document.getElementById("topic").value;
             if(!topic){
@@ -268,7 +293,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({topic:topic})
+                body: JSON.stringify({topic:topic, difficulty:difficulty})
             });
             const data = await response.json();
             if (data.error) {
