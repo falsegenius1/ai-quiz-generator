@@ -1,20 +1,20 @@
 require("dotenv").config();
-const express = require('express');
+const express = require("express");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const path = require('path');
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json())
-app.post('/generate-quiz', async (req, res) => {
-    const { topic, difficulty, numberOfQuestions } = req.body
-    try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-        const prompt = `You are an expert quiz generator specializing in educational content. Your task is to create a well-structured, engaging, and informative quiz based on the following parameters:
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.post("/generate-quiz", async (req, res) => {
+  const { topic, difficulty, numberOfQuestions } = req.body;
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `You are an expert quiz generator specializing in educational content. Your task is to create a well-structured, engaging, and informative quiz based on the following parameters:
 Topic: ${topic}
 Difficulty level: ${difficulty}
 Number of questions: ${numberOfQuestions}
@@ -74,21 +74,21 @@ Final check:
 
 Confirm that the number of questions matches ${numberOfQuestions}.
 Verify that each question has exactly 4 options.
-Ensure the JSON structure is valid and properly formatted.
+your entire response/output is going to consist of a single JSON object {}, and you will NOT wrap it within JSON md markers
 `;
-
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
-        const jsonString = text.replace(/^```json\s*|```$/g, '')
-        res.json(JSON.parse(jsonString));
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: "Sorry, the request can't be processed at this moment. Please try again." });
-    }
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+    const jsonString = text.replace(/^```json\s*|```$/g, "");
+    res.json(JSON.parse(jsonString));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      error:
+        "Sorry, the request can't be processed at this moment. Please try again.",
+    });
+  }
 });
 
-
-
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
